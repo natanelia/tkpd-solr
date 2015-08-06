@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"github.com/natanelia/tkpd-solr/solr"
 	"net/url"
+	"reflect"
 )
 
 func main() {
@@ -19,7 +20,8 @@ func main() {
 		fmt.Println("error")
 	}
 
-	fmt.Println(resp.GetString("spellcheck", "suggestions", "1", "suggestion", "0"))
-	fmt.Println(resp.GetMapToString("spellcheck"))
-	fmt.Println(resp.GetMapToInterface("spellcheck"))
+	fmt.Println(reflect.TypeOf(resp.GetString("spellcheck", "suggestions", "1", "suggestion", "0")))
+	fmt.Println(reflect.TypeOf(resp.GetMapToString("responseHeader")))
+	fmt.Println(reflect.TypeOf(resp.GetMapToInterface("spellcheck")))
+	fmt.Println(reflect.TypeOf(resp.GetArrayOfInterface("spellcheck", "suggestions")))
 }

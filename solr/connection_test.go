@@ -29,11 +29,16 @@ func TestGetResponseMap(t *testing.T) {
 		t.Errorf("ERROR: GetString failed")
 	}
 
-	if len(resp.GetMapToString("spellcheck")) == 0 {
-		t.Errorf("ERROR: GetMapToString failed")
+	if len(resp.GetMapToString("responseHeader")) == 0 {
+		t.Errorf("ERROR: GetMapToString map[string]string failed")
 	}
 
 	if len(resp.GetMapToInterface("spellcheck")) == 0 {
-		t.Errorf("ERROR: GetMapToInterface failed")
+		t.Errorf("ERROR: GetMapToInterface map[string]interface{} failed")
 	}
+
+	if len(resp.GetArrayOfInterface("spellcheck", "suggestions")) == 0 {
+		t.Errorf("ERROR: Get []interface{} failed")
+	}
+
 }
