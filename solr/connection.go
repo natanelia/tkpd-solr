@@ -11,9 +11,9 @@ import (
 	"strings"
 )
 
-const VERSION = "0.1"
+const VERSION = "0.2"
 
-var userAgent = fmt.Sprintf("Tokopedia/%s (+https://github.com/vanng822/go-solr)", VERSION)
+var userAgent = fmt.Sprintf("Tokopedia/%s (+https://github.com/natanelia/tkpd-solr)", VERSION)
 
 // HTTPPost make a POST request to path which also includes domain, headers are optional
 func HTTPPost(path string, data *[]byte, headers [][]string, username, password string) ([]byte, error) {
