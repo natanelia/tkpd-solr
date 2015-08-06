@@ -15,8 +15,10 @@ func NewMapOfStrings(m map[string]interface{}) mapOfStrings {
 }
 
 func (m mapOfStrings) GetString(params ...string) string {
-	for _, v := range params {
-		switch vv := m[v].(type) {
+	if len(params) == 0 {
+		return ""
+	} else {
+		switch vv := m[params[0]].(type) {
 		case string:
 			//fmt.Println("STRING")
 			return vv
@@ -39,8 +41,8 @@ func (m mapOfStrings) GetString(params ...string) string {
 				return strconv.Itoa(xx)
 
 			}
-		case interface{}:
-			//return "UNKNOWN"
+		default:
+			return ""
 		}
 	}
 	return ""
@@ -55,9 +57,7 @@ func (m mapOfStrings) GetMapToString(params ...string) map[string]string {
 				result[k] = vv
 			case int:
 				result[k] = strconv.Itoa(vv)
-			case []interface{}:
-				result[k] = ""
-			case map[string]interface{}:
+			default:
 				result[k] = ""
 			}
 		}
@@ -72,36 +72,32 @@ func (m mapOfStrings) GetMapToString(params ...string) map[string]string {
 					result[k] = vv
 				case int:
 					result[k] = strconv.Itoa(vv)
-				case []interface{}:
-					result[k] = ""
-				case map[string]interface{}:
+				default:
 					result[k] = ""
 				}
 			}
 			return result
 		}
 	} else {
-		for _, v := range params {
-			switch vv := m[v].(type) {
+		switch vv := m[params[0]].(type) {
+		case map[string]interface{}:
+			a := NewMapOfStrings(vv)
+			return a.GetMapToString(params[1:]...)
+		case []interface{}:
+			a, _ := strconv.Atoi(params[1])
+			switch xx := vv[a].(type) {
 			case map[string]interface{}:
-				a := NewMapOfStrings(vv)
-				return a.GetMapToString(params[1:]...)
-			case []interface{}:
-				a, _ := strconv.Atoi(params[1])
-				switch xx := vv[a].(type) {
-				case map[string]interface{}:
-					b := NewMapOfStrings(xx)
-					if len(params) > 1 {
-						return b.GetMapToString(params[2:]...)
-					} else {
-						return make(map[string]string)
-					}
-				default:
+				b := NewMapOfStrings(xx)
+				if len(params) > 1 {
+					return b.GetMapToString(params[2:]...)
+				} else {
 					return make(map[string]string)
 				}
 			default:
 				return make(map[string]string)
 			}
+		default:
+			return make(map[string]string)
 		}
 	}
 
@@ -123,6 +119,8 @@ func (m mapOfStrings) GetMapToInterface(params ...string) map[string]interface{}
 				result[k] = v
 			}
 			return result
+		default:
+			return make(map[string]interface{})
 		}
 	} else {
 		switch vv := m[params[0]].(type) {
