@@ -108,8 +108,7 @@ func json2bytes(data interface{}) (*[]byte, error) {
 
 func (c *Connection) GetResponseMap(handler string, params *url.Values) (mapOfStrings, error) {
 	params.Set("wt", "json")
-	fmt.Println(fmt.Sprintf("%s/%s/%s?%s", c.url.String(), c.core, handler, params.Encode()))
-	r, err := HTTPGet(fmt.Sprintf("%s/%s/%s?%s", c.url.String(), c.core, handler, params.Encode()), nil, c.username, c.password)
+	r, err := HTTPGet(fmt.Sprintf("%s/solr/%s/%s?%s", c.url.String(), c.core, handler, params.Encode()), nil, c.username, c.password)
 	if err != nil {
 		return nil, err
 	}

@@ -1,7 +1,6 @@
 package solr
 
 import (
-	"fmt"
 	"net/url"
 	"testing"
 )
@@ -17,7 +16,7 @@ func TestGetResponseMap(t *testing.T) {
 	params := &url.Values{}
 	params.Set("spellcheck.q", "samsun")
 
-	c, err := NewConnection("http://192.168.100.129:8983/solr", "product_spellcheck")
+	c, err := NewConnection("http://192.168.100.129:8983", "product_spellcheck")
 	if err != nil {
 		t.Errorf("ERROR: %s", err.Error())
 	}
@@ -26,7 +25,15 @@ func TestGetResponseMap(t *testing.T) {
 		t.Errorf("ERROR: %s", err2.Error())
 	}
 
-	fmt.Println(resp.GetString("spellcheck", "suggestions", "1", "suggestion", "0"))
-	fmt.Println(resp.GetMapToString("spellcheck"))
-	fmt.Println(resp.GetMapToInterface("spellcheck"))
+	if resp.GetString("spellcheck", "suggestions", "1", "suggestion", "0") == "" {
+		t.Errorf("ERROR: GetString failed")
+	}
+
+	if len(resp.GetMapToString("spellcheck")) == 0 {
+		t.Errorf("ERROR: GetMapToString failed")
+	}
+
+	if len(resp.GetMapToInterface("spellcheck")) == 0 {
+		t.Errorf("ERROR: GetMapToInterface failed")
+	}
 }
