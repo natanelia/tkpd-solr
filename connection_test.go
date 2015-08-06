@@ -26,7 +26,7 @@ func TestGetResponseMap(t *testing.T) {
 		t.Errorf("ERROR: %s", err2.Error())
 	}
 
-	resp = ConvertMapValueTypesToString(resp).(map[string]interface{})
-	res := NewMapOfStrings(resp)
-	fmt.Println(res.Get("spellcheck", "suggestions", "1", "suggestion", "0"))
+	fmt.Println(resp.GetString("spellcheck", "suggestions", "1", "suggestion", "0"))
+	fmt.Println(resp.GetMapToString("spellcheck"))
+	fmt.Println(resp.GetMapToInterface("spellcheck"))
 }
