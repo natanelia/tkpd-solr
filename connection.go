@@ -106,7 +106,7 @@ func json2bytes(data interface{}) (*[]byte, error) {
 	return &b, nil
 }
 
-func (c *Connection) getResponseMap(handler string, params *url.Values) (map[string]interface{}, error) {
+func (c *Connection) GetResponseMap(handler string, params *url.Values) (map[string]interface{}, error) {
 	params.Set("wt", "json")
 	fmt.Println(fmt.Sprintf("%s/%s/%s?%s", c.url.String(), c.core, handler, params.Encode()))
 	r, err := HTTPGet(fmt.Sprintf("%s/%s/%s?%s", c.url.String(), c.core, handler, params.Encode()), nil, c.username, c.password)
@@ -163,7 +163,7 @@ func (m mapOfStrings) Get(params ...string) string {
 	return ""
 }
 
-func convertMapValueTypesToString(d interface{}) interface{} {
+func ConvertMapValueTypesToString(d interface{}) interface{} {
 	switch dd := d.(type) {
 	case string:
 		// fmt.Println("STRING", dd)
@@ -180,14 +180,14 @@ func convertMapValueTypesToString(d interface{}) interface{} {
 	case map[string]interface{}:
 		// fmt.Println("map string interface")
 		for k, v := range dd {
-			dd[k] = convertMapValueTypesToString(v)
+			dd[k] = ConvertMapValueTypesToString(v)
 		}
 		return dd
 
 	case []interface{}:
 		// fmt.Println("[]interface{}")
 		for i, v := range dd {
-			dd[i] = convertMapValueTypesToString(v)
+			dd[i] = ConvertMapValueTypesToString(v)
 		}
 		return dd
 	}
@@ -224,8 +224,6 @@ func PrintMapInterface(d map[string]interface{}) {
 		}
 	}
 }
-
-type UrlParams url.Values
 
 /*func hasError(response map[string]interface{}) (string, bool) {
 	errorMap, ok := response["error"].(map[string]interface{})

@@ -21,12 +21,12 @@ func TestGetResponseMap(t *testing.T) {
 	if err != nil {
 		t.Errorf("ERROR: %s", err.Error())
 	}
-	resp, err2 := c.getResponseMap("spell", params)
+	resp, err2 := c.GetResponseMap("spell", params)
 	if err2 != nil {
 		t.Errorf("ERROR: %s", err2.Error())
 	}
 
-	resp = convertMapValueTypesToString(resp).(map[string]interface{})
+	resp = ConvertMapValueTypesToString(resp).(map[string]interface{})
 	res := NewMapOfStrings(resp)
 	fmt.Println(res.Get("spellcheck", "suggestions", "1", "suggestion", "0"))
 }
