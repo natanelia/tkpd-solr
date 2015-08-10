@@ -30,16 +30,19 @@ func (m mapOfStrings) GetString(params ...string) string {
 			//fmt.Println("INT")
 			return strconv.Itoa(vv)
 		case []interface{}:
-			a, _ := strconv.Atoi(params[1])
-			switch xx := vv[a].(type) {
-			case string:
-				return xx
-			case map[string]interface{}:
-				b := NewMapOfStrings(xx)
-				return b.GetString(params[2:]...)
-			case int:
-				return strconv.Itoa(xx)
-
+			if len(params) > 1 {
+				a, _ := strconv.Atoi(params[1])
+				switch xx := vv[a].(type) {
+				case string:
+					return xx
+				case map[string]interface{}:
+					if len(params) > 2 {
+						b := NewMapOfStrings(xx)
+						return b.GetString(params[2:]...)
+					}
+				case int:
+					return strconv.Itoa(xx)
+				}
 			}
 		default:
 			return ""
@@ -84,11 +87,25 @@ func (m mapOfStrings) GetMapToString(params ...string) map[string]string {
 			a := NewMapOfStrings(vv)
 			return a.GetMapToString(params[1:]...)
 		case []interface{}:
+			if len(params) > 1 {
+				a, _ := strconv.Atoi(params[1])
+				switch xx := vv[a].(type) {
+				case map[string]interface{}:
+					b := NewMapOfStrings(xx)
+					if len(params) > 2 {
+						return b.GetMapToString(params[2:]...)
+					} else {
+						return make(map[string]string)
+					}
+				default:
+					return make(map[string]string)
+				}
+			}
 			a, _ := strconv.Atoi(params[1])
 			switch xx := vv[a].(type) {
 			case map[string]interface{}:
 				b := NewMapOfStrings(xx)
-				if len(params) > 1 {
+				if len(params) > 2 {
 					return b.GetMapToString(params[2:]...)
 				} else {
 					return make(map[string]string)
@@ -128,17 +145,19 @@ func (m mapOfStrings) GetMapToInterface(params ...string) map[string]interface{}
 			a := NewMapOfStrings(vv)
 			return a.GetMapToInterface(params[1:]...)
 		case []interface{}:
-			a, _ := strconv.Atoi(params[1])
-			switch xx := vv[a].(type) {
-			case map[string]interface{}:
-				b := NewMapOfStrings(xx)
-				if len(params) > 1 {
-					return b.GetMapToInterface(params[2:]...)
-				} else {
+			if len(params) > 1 {
+				a, _ := strconv.Atoi(params[1])
+				switch xx := vv[a].(type) {
+				case map[string]interface{}:
+					b := NewMapOfStrings(xx)
+					if len(params) > 2 {
+						return b.GetMapToInterface(params[2:]...)
+					} else {
+						return make(map[string]interface{})
+					}
+				default:
 					return make(map[string]interface{})
 				}
-			default:
-				return make(map[string]interface{})
 			}
 		default:
 			return make(map[string]interface{})
@@ -172,17 +191,19 @@ func (m mapOfStrings) GetArrayOfInterface(params ...string) []interface{} {
 			a := NewMapOfStrings(vv)
 			return a.GetArrayOfInterface(params[1:]...)
 		case []interface{}:
-			a, _ := strconv.Atoi(params[1])
-			switch xx := vv[a].(type) {
-			case map[string]interface{}:
-				b := NewMapOfStrings(xx)
-				if len(params) > 1 {
-					return b.GetArrayOfInterface(params[2:]...)
-				} else {
+			if len(params) > 1 {
+				a, _ := strconv.Atoi(params[1])
+				switch xx := vv[a].(type) {
+				case map[string]interface{}:
+					b := NewMapOfStrings(xx)
+					if len(params) > 2 {
+						return b.GetArrayOfInterface(params[2:]...)
+					} else {
+						return make([]interface{}, 0)
+					}
+				default:
 					return make([]interface{}, 0)
 				}
-			default:
-				return make([]interface{}, 0)
 			}
 		default:
 			return make([]interface{}, 0)
